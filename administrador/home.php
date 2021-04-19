@@ -150,8 +150,7 @@ if(!isset($_SESSION['id-usuario'])){
   </div>
   <!-- /.content-wrapper -->
   <footer class="main-footer">
-    <strong>Copyright &copy; 2020 <a href="https://github.com/karin-jpg/" target="_blank">Karín Morais</a>.</strong>
-    All rights reserved.
+    <strong><a href="https://github.com/karin-jpg/" target="_blank">Karín Morais</a></strong>
     <div class="float-right d-none d-sm-inline-block">
       <b>Version</b> 1
 

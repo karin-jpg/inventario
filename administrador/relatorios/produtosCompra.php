@@ -142,12 +142,12 @@ $fornecedores = $fornecedor->listar();
             <td>'.$relatorio[$i]['loja'].'</td>
             <td>'.$relatorio[$i]['fornecedor'].'</td>
             <td>'.$relatorio[$i]['quantidade_atual'].'</td>
-            <td>'.$relatorio[$i]['ideal'].'</td>
             <td>'.$relatorio[$i]['min'].'</td>
-            <td>'.$relatorio[$i]['quantidade_para_ideal'].'</td>
+            <td>'.$relatorio[$i]['ideal'].'</td>
             <td>'.$relatorio[$i]['quantidade_para_min'].'</td>
-            <td>'.$relatorio[$i]['preco_ideal'].'</td>
+            <td>'.$relatorio[$i]['quantidade_para_ideal'].'</td>
             <td>'.$relatorio[$i]['preco_min'].'</td>
+            <td>'.$relatorio[$i]['preco_ideal'].'</td>
 					</tr>';
 				  }
 					?>
