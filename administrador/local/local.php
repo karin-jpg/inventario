@@ -5,11 +5,13 @@ if(!isset($_SESSION['id-usuario'])){
   header("location: ../../index.php");
 }
 include_once('../../class/local.class.php');
+include_once('../../class/loja.class.php');
+
 
 $acao = $_POST['acao'];
 if($acao == 'novo'){
 
-  $sucesso = $local->salvar($_POST['nome']);
+  $sucesso = $local->salvar($_POST['nome'], $_POST['loja']);
   if($sucesso){
     $msg = "Local inserido!";
   }else{
@@ -18,13 +20,14 @@ if($acao == 'novo'){
 }
 
 if($acao == 'editar'){
-  $sucesso = $local->editar($_POST['id-local'], $_POST['nome']);
+  $sucesso = $local->editar($_POST['id-local'], $_POST['nome'], $_POST['loja']);
   if($sucesso){
     $msg = "Local atualizado!";
   }else{
     $msg = "Ocorreu um erro ao atualizar o local, caso o mesmo persista contate o suporte";
   }
 }
+$lojas = $loja->listar();
 $locais = $local->listar();
 ?>
 <!DOCTYPE html>
@@ -90,6 +93,7 @@ $locais = $local->listar();
                   <thead>
                     <tr>
                       <th>Nome</th>
+                      <th>Loja</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -99,6 +103,7 @@ $locais = $local->listar();
 					echo
 					'<tr id = "'.$locais[$i]['id'].'">
 						<td>'.$locais[$i]['nome'].'</td>
+            <td>'.$locais[$i]['nome_loja'].'</td>
 					</tr>';
 				  }
 					?>
@@ -106,6 +111,7 @@ $locais = $local->listar();
                   <tfoot>
                   <tr>
                   <th>Nome</th>
+                  <th>Loja</th>
                   </tr>
                   </tfoot>
                 </table>
@@ -129,7 +135,7 @@ $locais = $local->listar();
             <div class="modal-body">
               <div id = "form-body" class="card card-primary">
               <div class="card-header">
-                <h3 class="card-title" id="titulo">Novo Local</h3>
+                <h3 class="card-title" id="titulo"></h3>
               </div>
               <!-- /.card-header -->
               <!-- form start -->
@@ -137,9 +143,23 @@ $locais = $local->listar();
               <input type="hidden" name="acao" id = "acao" value = "">
               <input type="hidden" name="id-local" id = "id-local" value = "">
                 <div class="card-body">
+
                     <div class="form-group">
                         <label>Nome</label>
                         <input type="text" class="form-control" name="nome" id = "nome">
+                    </div>
+
+                    <div class="form-group">
+					            <label>Loja</label>
+					              <select class="form-control select2" name = "loja" id = "loja" style="width: 100%;">
+					            	  <option selected="selected">Selecione</option>
+					            	  <?php
+  					            		for($i = 0; $i < count($lojas); $i++)
+	  				            		{
+		  			            			echo '<option value = "'.$lojas[$i]['id'].'">'.$lojas[$i]['nome'].'</option>';
+			  		            		}
+				  	            	?>
+					              </select>
                     </div>
                     <div>
                       <label style="color:red;" id="erros-form"></label>
@@ -191,6 +211,7 @@ document.querySelector("#tableLocal").addEventListener("dblclick", function(even
 
   
   acao.value = 'editar';
+  document.querySelector("#erros-form").innerText = "";
   botao.classList.remove('btn-primary');
   form.classList.remove('card-primary');
   botao.classList.add('btn-info');
@@ -203,12 +224,18 @@ document.querySelector("#tableLocal").addEventListener("dblclick", function(even
   });
       var filhos = event.target.parentNode.children;
       var info = [];
-      
-      for(let i = 0; i < filhos.length; i++){
-        info.push(filhos[i].innerText);
-      }
+      var lojas = document.querySelector('#loja');
+      var lojaSelecionada = '';
+
+      Array.prototype.forEach.call(lojas.options, (loja) => {
+        if(loja.innerText == filhos[1].innerText){
+          loja.selected = true;
+        }
+      });
+
       document.querySelector('#id-local').value = event.target.parentNode.id;
-      document.querySelector('#nome').value = info[0];
+      document.querySelector('#nome').value = filhos[0].innerText;
+      
 
   });
 
@@ -257,7 +284,9 @@ document.querySelector("#tableLocal").addEventListener("dblclick", function(even
   {
     var form = document.querySelector("#form");
   	var nome = document.querySelector("#nome");
+    var loja = document.querySelector("#loja");
     var nomeValido = nome.value.length > 0;
+    var lojaValida = !(loja.value == 'Selecione')
     var labelErro = document.querySelector("#erros-form");
     
     
@@ -266,6 +295,11 @@ document.querySelector("#tableLocal").addEventListener("dblclick", function(even
             nome: 'nome',
             valido: nomeValido,
             mensagem: 'Nome do local não pode estar vazio!'
+        },
+        {
+            nome: 'loja',
+            valido: lojaValida,
+            mensagem: 'Selecione uma loja!'
         }
     ]
 

@@ -5,22 +5,25 @@ class local{
     
     private $id;
     private $nome;
+	private $loja;
 
 
     
 	public function listar(){
 		$banco = new banco();
-		$sql = "SELECT * FROM local order by nome DESC;";
+		$sql = "SELECT l.id, l.nome, lo.nome AS nome_loja FROM local l
+				INNER JOIN loja lo ON (l.id_loja = lo.id )
+				ORDER BY l.nome DESC";
 		$result = $banco->executa($sql);
         $banco->close();
 		return $result;
     }    
 	
-    public function salvar($nome){
+    public function salvar($nome, $id_loja){
 		$banco = new banco();
 		$banco->begin();
-		$sql = "INSERT INTO local (nome) VALUES
-				('$nome');";
+		$sql = "INSERT INTO local (nome, id_loja) VALUES
+				('$nome', '$id_loja');";
 		$banco->executa($sql);
 		
 		if($banco->error()[0] != '00000'){
@@ -34,12 +37,13 @@ class local{
 		}
     }    
 
-    public function editar($id, $nome){
+    public function editar($id, $nome, $id_loja){
         $banco = new banco();
 		$banco->begin();
-		$sql = "UPDATE local set 
-	    	nome = '$nome'
-		  where id = $id";
+		$sql = "UPDATE local SET
+	    	nome = '$nome',
+			id_loja = '$id_loja'
+		  	WHERE id = $id";
 
 		  $banco->executa($sql);
            if($banco->error()[0] != '00000'){
