@@ -1,18 +1,16 @@
 <?php
 
 include_once 'banco.class.php';
-class status{
-    
-    private $id;
-    private $nome;
+class acesso{
+
     
 	public function listar(){
 		$banco = new banco();
-		$sql = "SELECT * FROM status";
+		$sql = "SELECT * FROM permissao_usuario where id_usuario = ".$_SESSION['id-usuario'];
 		$result = $banco->executa($sql);
         $banco->close();
 		return $result;
     }      
 }
-$status = new status();    
+$acesso = new acesso();    
 ?>
