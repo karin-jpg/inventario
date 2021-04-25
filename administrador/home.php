@@ -1,9 +1,12 @@
 <?php
 session_start();
-
+error_reporting(0);
+include("../class/acesso.class.php");
 if(!isset($_SESSION['id-usuario'])){
   header("location: ../index.php");
 }
+
+$permissoes = $acesso->listar();
 
 ?>
 <!DOCTYPE html>
@@ -78,7 +81,6 @@ if(!isset($_SESSION['id-usuario'])){
           <a href="#" class="d-block"><?= ucfirst($_SESSION['usuario']) ?></a>
         </div>
       </div>
-
       <!-- Sidebar Menu -->
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
@@ -91,7 +93,8 @@ if(!isset($_SESSION['id-usuario'])){
               Inventário
             </p>
         </a>
-      </li>   
+      </li>
+      <?php if($permissoes[0]['produtos']){?>
 			<li class="nav-item">
         <a href="#" onClick="abre_arquivo('produto/produto.php');" class="nav-link">
           <i class="nav-icon fas fa-barcode"></i>
@@ -100,6 +103,10 @@ if(!isset($_SESSION['id-usuario'])){
             </p>
         </a>
       </li>
+      <?php } 
+      
+      if($permissoes[0]['fornecedores']){
+      ?>
       <li class="nav-item">
         <a href="#" onClick="abre_arquivo('fornecedor/fornecedor.php');" class="nav-link">
           <i class="nav-icon fas fa-dolly-flatbed"></i>
@@ -108,6 +115,10 @@ if(!isset($_SESSION['id-usuario'])){
             </p>
         </a>
       </li>
+      <?php } 
+      
+      if($permissoes[0]['lojas']){
+      ?>
       <li class="nav-item">
         <a href="#" onClick="abre_arquivo('loja/loja.php');" class="nav-link">
           <i class="nav-icon fas fa-home"></i>
@@ -116,6 +127,10 @@ if(!isset($_SESSION['id-usuario'])){
             </p>
         </a>
       </li>
+      <?php 
+        }
+      
+        if($permissoes[0]['locais']){?>
       <li class="nav-item">
         <a href="#" onClick="abre_arquivo('local/local.php');" class="nav-link">
           <i class="nav-icon fas fa-door-closed"></i>
@@ -124,6 +139,12 @@ if(!isset($_SESSION['id-usuario'])){
             </p>
         </a>
       </li>
+      <?php 
+        }
+      
+        if($permissoes[0]['relatorios']){
+
+      ?>
       <li class="nav-item">
         <a href="#" onClick="abre_arquivo('relatorios/relatorios.php');" class="nav-link">
           <i class="nav-icon fas fa-file-signature"></i>
@@ -132,6 +153,7 @@ if(!isset($_SESSION['id-usuario'])){
             </p>
         </a>
       </li>
+      <?php }?>
 
 
 
