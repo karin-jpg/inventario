@@ -1,16 +1,19 @@
 <?php
 
+
 include_once 'banco.class.php';
 class loja{
     
     private $id;
     private $nome;
 
-
-    
 	public function listar(){
 		$banco = new banco();
-		$sql = "SELECT * FROM loja order by nome DESC;";
+		$sql = "SELECT * FROM loja l
+		INNER JOIN acesso_loja al 
+		ON (l.id = al.id_loja)
+		WHERE id_usuario = ".$_SESSION['id-usuario']."
+		ORDER BY nome DESC;";
 		$result = $banco->executa($sql);
         $banco->close();
 		return $result;
