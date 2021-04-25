@@ -5,7 +5,7 @@ include_once 'class/banco.class.php';
 
 $msg = "";
 if($_POST[acao] == login){
-  $login = $_POST[login];
+  $login = strtolower($_POST[login]);
   $senha = $_POST[senha];
   $sql = "SELECT * from usuario where nome = '".$login."'";
     

@@ -93,6 +93,7 @@ $permissoes = $acesso->listar();
               Inventário
             </p>
         </a>
+
       </li>
       <?php if($permissoes[0]['produtos']){?>
 			<li class="nav-item">
@@ -141,6 +142,20 @@ $permissoes = $acesso->listar();
       </li>
       <?php 
         }
+      
+        if($permissoes[0]['usuarios']){
+
+      ?>
+      <li class="nav-item">
+        <a href="#" onClick="abre_arquivo('usuarios/usuario.php');" class="nav-link">
+        <i class="nav-icon fas fa-chalkboard-teacher"></i>
+            <p>
+              Usuários
+            </p>
+        </a>
+      </li>
+      
+      <?php }
       
         if($permissoes[0]['relatorios']){
 

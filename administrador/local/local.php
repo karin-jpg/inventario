@@ -223,24 +223,26 @@ document.querySelector("#tableLocal").addEventListener("dblclick", function(even
     show: true
   });
       var filhos = event.target.parentNode.children;
-      var info = [];
       var lojas = document.querySelector('#loja');
-      var lojaSelecionada = '';
-
-      Array.prototype.forEach.call(lojas.options, (loja) => {
-        if(loja.innerText == filhos[1].innerText){
-          loja.selected = true;
-        }
-      });
 
       document.querySelector('#id-local').value = event.target.parentNode.id;
       document.querySelector('#nome').value = filhos[0].innerText;
-      
-
+      setValor(lojas, filhos[1]);
   });
 
 </script>
+
 <script>
+
+function setValor(campo, valor){
+    Array.prototype.map.call(campo.options, (campo) => {
+        if(campo.innerText == valor.innerText){
+          campo.selected = true;
+        }
+      });
+  }
+
+
   $(function () {
 	
 
