@@ -337,7 +337,7 @@ document.querySelector("#tableProduto").addEventListener("dblclick", function(ev
     var erros = validacoes.filter(campo => !campo.valido)
     var msg = "";
     if(erros.length){
-      erros.forEach((erros) => {
+      erros.map((erros) => {
           msg += erros.mensagem+"\n";
       })
       labelErro.innerText = msg;
