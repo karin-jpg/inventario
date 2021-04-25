@@ -18,11 +18,11 @@ class produto{
 		return $result;
     }    
 	
-    public function salvar($nome, $descricao, $quantidade_minima, $quantidade_ideal){
+    public function salvar($codigo, $nome, $descricao, $quantidade_minima, $quantidade_ideal){
 		$banco = new banco();
 		$banco->begin();
-		$sql = "INSERT INTO produto (nome, descricao, quantidade_min, quantidade_ideal) VALUES
-				('$nome', '$descricao', '$quantidade_minima', '$quantidade_ideal');";
+		$sql = "INSERT INTO produto (codigo, nome, descricao, quantidade_min, quantidade_ideal) VALUES
+				($codigo, '$nome', '$descricao', '$quantidade_minima', '$quantidade_ideal');";
 		$banco->executa($sql);
 		
 		if($banco->error()[0] != '00000'){
@@ -36,10 +36,11 @@ class produto{
 		}
     }    
 
-    public function editar($id, $nome, $descricao, $quantidade_minima, $quantidade_ideal){
+    public function editar($id, $codigo, $nome, $descricao, $quantidade_minima, $quantidade_ideal){
         $banco = new banco();
 		$banco->begin();
 		$sql = "UPDATE produto set 
+			codigo = $codigo,
 	    	nome = '$nome',
 			descricao = '$descricao',
 			quantidade_min = $quantidade_minima,

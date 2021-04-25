@@ -9,7 +9,7 @@ include_once('../../class/produto.class.php');
 $acao = $_POST['acao'];
 if($acao == 'novo'){
 
-  $sucesso = $produto->salvar($_POST['nome'], $_POST['descricao'], $_POST['quantidade-min'], $_POST['quantidade-ideal']);
+  $sucesso = $produto->salvar($_POST['codigo'], $_POST['nome'], $_POST['descricao'], $_POST['quantidade-min'], $_POST['quantidade-ideal']);
   if($sucesso){
     $msg = "Produto inserido!";
   }else{
@@ -18,7 +18,7 @@ if($acao == 'novo'){
 }
 
 if($acao == 'editar'){
-  $sucesso = $produto->editar($_POST['id-produto'], $_POST['nome'], $_POST['descricao'], $_POST['quantidade-min'], $_POST['quantidade-ideal']);
+  $sucesso = $produto->editar($_POST['id-produto'], $_POST['codigo'], $_POST['nome'], $_POST['descricao'], $_POST['quantidade-min'], $_POST['quantidade-ideal']);
   if($sucesso){
     $msg = "Produto atualizado!";
   }else{
@@ -89,6 +89,7 @@ $produtos = $produto->listar();
                 <table id="tableProduto" class="table table-bordered table-striped">
                   <thead>
                     <tr>
+                      <th>Código</th>
                       <th>Nome</th>
                       <th>Descrição</th>
                       <th>Quantidade mínima</th>
@@ -101,6 +102,7 @@ $produtos = $produto->listar();
 				  {
 					echo
 					'<tr id = "'.$produtos[$i]['id'].'">
+            <td>'.$produtos[$i]['codigo'].'</td>
 						<td>'.$produtos[$i]['nome'].'</td>
 						<td>'.$produtos[$i]['descricao'].'</td>
             <td>'.$produtos[$i]['quantidade_min'].'</td>
@@ -111,10 +113,11 @@ $produtos = $produto->listar();
                   </tbody>
                   <tfoot>
                   <tr>
-                  <th>Nome</th>
-                   <th>Descrição</th>
-                   <th>Quantidade mínima</th>
-                   <th>Quantidade ideal</th>
+                    <th>Código</th>
+                    <th>Nome</th>
+                    <th>Descrição</th>
+                    <th>Quantidade mínima</th>
+                    <th>Quantidade ideal</th>
                   </tr>
                   </tfoot>
                 </table>
@@ -146,6 +149,11 @@ $produtos = $produto->listar();
               <input type="hidden" name="acao" id = "acao" value = "">
               <input type="hidden" name="id-produto" id = "id-produto" value = "">
                 <div class="card-body">
+                <div class="form-group">
+                        <label>Código</label>
+                        <input type="text" class="form-control" name="codigo" id = "codigo">
+                    </div>
+
                     <div class="form-group">
                         <label>Nome</label>
                         <input type="text" class="form-control" name="nome" id = "nome">
@@ -173,7 +181,7 @@ $produtos = $produto->listar();
                 
                   
                 <div class="card-footer">
-                  <button type="submit" id="button-cad" method="post" onClick="return validaCad();" class="btn btn-primary"><?= $_SESSION['tipo']?>Cadastrar</button>
+                  <button type="submit" id="button-cad" method="post" onClick="return validaCad();" class="btn btn-primary">Cadastrar</button>
                 </div>
               </form>
             </div>
@@ -232,10 +240,11 @@ document.querySelector("#tableProduto").addEventListener("dblclick", function(ev
         info.push(filhos[i].innerText);
       }
       document.querySelector('#id-produto').value = event.target.parentNode.id;
-      document.querySelector('#nome').value = info[0];
-      document.querySelector('#descricao').value = info[1];
-      document.querySelector('#quantidade-min').value = info[2];
-      document.querySelector('#quantidade-ideal').value = info[3];
+      document.querySelector('#codigo').value = info[0];
+      document.querySelector('#nome').value = info[1];
+      document.querySelector('#descricao').value = info[2];
+      document.querySelector('#quantidade-min').value = info[3];
+      document.querySelector('#quantidade-ideal').value = info[4];
 
   });
 
@@ -284,18 +293,25 @@ document.querySelector("#tableProduto").addEventListener("dblclick", function(ev
   {
     var form = document.querySelector("#form");
   	var nome = document.querySelector("#nome");
+    var codigo = document.querySelector("#codigo");
     var desc = document.querySelector("#descricao");
     var quantidade_min = document.querySelector("#quantidade-min");
     var quantidade_ideal = document.querySelector("#quantidade-ideal");
     var regex = /[A-z]/g;
     var nomeValido = nome.value.length > 5;
     var descValido = desc.value.length > 10;
+    var codigoValido = (regex.exec(codigo.value) == null && codigo.value.length > 0);
     var quantidadeMinValido = (regex.exec(quantidade_min.value) == null && quantidade_min.value.length > 0);
     var quantidadeIdealValido = (regex.exec(quantidade_ideal.value) == null && quantidade_ideal.value.length > 0);
     var labelErro = document.querySelector("#erros-form");
     
     
     var validacoes = [
+        {
+          nome: 'codigo',
+          valido: codigoValido,
+          mensagem: 'Código do produto inválido'
+        },
         {
             nome: 'nome',
             valido: nomeValido,
@@ -340,9 +356,6 @@ document.querySelector("#tableProduto").addEventListener("dblclick", function(ev
     document.querySelector("#form-body").classList.add('card-primary');
     document.querySelector("#button-cad").classList.add('btn-primary');
     document.querySelector("#nome").value = "";
-    document.querySelector("#cep").value = "";
-    document.querySelector("#numero").value = "";
-    document.querySelector("#telefone").value = "";
     document.querySelector("#erros-form").innerText = "";
     document.querySelector("#aviso").innerText = "";
     document.querySelector("#aviso").style.display = "none";
